@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        table, tr, td, th {
+            border : 1px solid black;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding:10 px;
+        }
+        td {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>FORM USERS</h1>
+    <form id="form-users">
+        <input type="text" id="nama" placeholder="username">
+        <input type="text" id="email" placeholder="email">
+        <br>
+        <button onclick="OnBtnAddUser(event)"> ADD</button>
+        role:
+        <select id="role">
+            <option>user</option>
+            <option>admin</option>
+        </select>
+    </form>
+    <h1>USERS DATA</h1>
+    <table id="user-data">
+        <thead>
+            <tr>
+                <th>No.</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    
+</body>
+<script>
+
+let datauser = [
+    {
+        id : 1,
+        name : "alee",
+        email : "alee@gmail.com",
+        role : "admin"
+    },
+    {
+        id : 2,
+        name : "jenie",
+        email : "jenniebp@gmail.com",
+        role : "user"
+    },
+
+    {
+        id : 3,
+        name : "elsa",
+        email : "elsa@disney.com",
+        role : "user"
+    }
+]
+
+class users {
+    constructor (id, name, email, role){
+        this.id = id
+        this.name = name
+        this.email = email
+        this.role = role
+    }
+}
+
+function ShowUserData (idx) {
+    let table = document.getElementById("user-data")
+    console.log(table)
+
+    let tbody = table.getElementsByTagName("tbody")[0]
+    console.log(tbody)
+    
+    let tr = ""
+    for (let i = 0; i < datauser.length; i++){
+        if (idx == i) {
+            tr += `
+                <tr>
+                    <td></td>
+                    <td>
+                        <input id="edit-nama"type="text">    
+                    </td>
+                    <td><input id="edit-email" type="text"></td>
+                    <td><select id="edit-role">
+                        <option>user</option>
+                        <option>admin</option>
+                        </select></td> 
+                        <td>
+                            <button onclick="OnBtnSave(${i})">SAVE</button>
+                            <button onclick="OnBtnCancel()">CANCEL</button>
+                            </td>
+                </tr>
+            `
+        } else {
+             tr += `
+                <tr>
+                    <td>${i + 1}</td>
+                    <td> 
+                        ${datauser[i].name}    
+                    </td>
+                    <td>${datauser[i].email}</td>
+                    <td>${datauser[i].role} </td>
+                    <td>
+                        <button onclick="OnButtonDel(${i})">DELETE</button>
+                        <button onclick="OnButtonEdit(${i})">EDIT</button>
+                        
+                        </td>
+                    </tr>
+                    `
+                }
+    } 
+    tbody.innerHTML = tr
+}
+ShowUserData ()
+
+    function OnBtnAddUser (event){
+        event.preventDefault()
+        console.log("add button di klil")
+    
+    //get value
+    //akses ke form 
+    let form = document.getElementById("form-users")
+    console.log(form)
+    console.log(form["nama"].value)
+
+    datauser.push(new users
+        (datauser.length + 1,
+        form["nama"].value,
+        form["email"].value,
+        form["role"].value
+        )
+     )
+     console.log(datauser)
+
+     ShowUserData()
+
+     //reset value
+        form["nama"].value = ""
+        form["email"].value = ""
+        form["role"].value = ""
+
+    }
+
+    function OnButtonDel (index) {
+        console.log(`delete di klik nich ke ${index}`)
+
+        datauser.splice(index, 1)
+
+        ShowUserData()
+
+    }
+
+    function OnButtonEdit (index) {
+        console.log(`edit ke ${index}`)
+
+        //tampilkan table
+        ShowUserData(index)
+    }
+
+    function OnBtnSave (index) {
+        console.log("btn save d klik")
+
+        let editNama = document.getElementById("edit-nama").value
+        let editEmail = document.getElementById("edit-email").value
+        let editRole = document.getElementById("edit-role").value
+        console.log(editNama)
+        console.log(editEmail)
+        console.log(editRole)
+        
+        datauser[index].name = editNama
+        datauser[index].email = editEmail
+        datauser[index].role = editRole
+        console.log(datauser)
+
+        ShowUserData()
+    }
+
+    function OnBtnCancel(){
+        console.log("btn cancel d klik")
+
+        ShowUserData()
+    }
+</script>
+</html>
